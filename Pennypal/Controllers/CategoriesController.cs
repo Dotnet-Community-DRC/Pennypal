@@ -1,10 +1,3 @@
-using AutoMapper;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.EntityFrameworkCore;
-using Pennypal.Data;
-using Pennypal.DTOs;
-using Pennypal.Entities;
-
 namespace Pennypal.Controllers;
 
 public class CategoriesController : BaseApiController
@@ -37,7 +30,7 @@ public class CategoriesController : BaseApiController
     }
 
     [HttpPost]
-    public async Task<ActionResult<Category>> CreateCategory([FromForm] CreateCategoryDto categoryDto)
+    public async Task<ActionResult<Category>> CreateCategory(CreateCategoryDto categoryDto)
     {
         var category = _mapper.Map<Category>(categoryDto);
 
@@ -45,19 +38,21 @@ public class CategoriesController : BaseApiController
 
         var result = await _context.SaveChangesAsync() > 0;
 
-        if (result) return CreatedAtRoute("GetCategory", new { Id = category.Guid }, category);
+        if (result) return CreatedAtRoute("GetCategory", new { Id = category.Id }, category);
 
         return BadRequest(new ProblemDetails { Title = "Problem saving Category" });
     }
 
-    [HttpPut]
-    public async Task<ActionResult<Category>> UpdateCategory([FromForm] UpdateCategoryDto categoryDto)
+    [HttpPut("{id}")]
+    public async Task<ActionResult<Category>> UpdateCategory(Guid id, UpdateCategoryDto categoryDto)
     {
-        var category = await _context.Categories.FindAsync(categoryDto.Id);
+        var category = await _context.Categories.FindAsync(id);
 
         if (category is null) return NotFound();
 
-        _mapper.Map(category, categoryDto);
+        // _mapper.Map(categoryDto, category);
+        category.Name = categoryDto.Name ?? category.Name;
+        category.Description = categoryDto.Description ?? category.Description;
 
         var result = await _context.SaveChangesAsync() > 0;
 
@@ -71,7 +66,7 @@ public class CategoriesController : BaseApiController
     {
         var category = await _context.Categories.FindAsync(id);
 
-        if (category is null) return NotFound();
+        if (category is null) return NotFound("Could not be found!");
 
         _context.Categories.Remove(category);
 

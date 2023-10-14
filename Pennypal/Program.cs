@@ -1,7 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using Pennypal.Data;
-using Pennypal.Middleware;
-
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
@@ -16,6 +12,8 @@ builder.Services.AddDbContext<AppDbContext>(option =>
 {
     option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
+
+builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly); // Scans for Mapping Profiles in the whole project
 
 var app = builder.Build();
 

@@ -1,7 +1,3 @@
-using AutoMapper;
-using Pennypal.DTOs;
-using Pennypal.Entities;
-
 namespace Pennypal.RequestHelpers;
 
 public class MappingProfiles: Profile
@@ -9,6 +5,10 @@ public class MappingProfiles: Profile
     public MappingProfiles()
     {
         CreateMap<CreateCategoryDto, Category>();
-        CreateMap<UpdateCategoryDto, Category>();
+        CreateMap<UpdateCategoryDto, Category>()
+            .ForMember(dest => dest.Id, act
+                => act.Ignore())
+            .ForAllMembers(opts 
+                => opts.Condition((src, dest, srcMember) => srcMember != null));
     }
 }

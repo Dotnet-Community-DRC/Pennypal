@@ -1,6 +1,3 @@
-using Microsoft.EntityFrameworkCore;
-using Pennypal.Entities;
-
 namespace Pennypal.Data;
 
 public class AppDbContext: DbContext
