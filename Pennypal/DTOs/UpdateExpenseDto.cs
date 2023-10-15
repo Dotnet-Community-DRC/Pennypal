@@ -1,6 +1,6 @@
-namespace Pennypal.Entities;
+namespace Pennypal.DTOs;
 
-public class Expense
+public class UpdateExpenseDto
 {
     public Guid Id { get; set; }
     public string Name { get; set; }

@@ -1,8 +1,7 @@
-namespace Pennypal.Entities;
+namespace Pennypal.DTOs;
 
-public class Expense
+public class CreateExpenseDto
 {
-    public Guid Id { get; set; }
     public string Name { get; set; }
     public decimal Amount { get; set; }
     public DateTime Date { get; set; }

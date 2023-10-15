@@ -32,6 +32,7 @@ public class CategoriesController : BaseApiController
     [HttpPost]
     public async Task<ActionResult<Category>> CreateCategory(CreateCategoryDto categoryDto)
     {
+        _logger.LogInformation("Creating new category: {@categoryDto}", categoryDto);
         var category = _mapper.Map<Category>(categoryDto);
 
         _context.Categories.Add(category);
@@ -39,7 +40,9 @@ public class CategoriesController : BaseApiController
         var result = await _context.SaveChangesAsync() > 0;
 
         if (result) return CreatedAtRoute("GetCategory", new { Id = category.Id }, category);
-
+        
+        _logger.LogWarning("Problem saving category.");
+        
         return BadRequest(new ProblemDetails { Title = "Problem saving Category" });
     }
 
