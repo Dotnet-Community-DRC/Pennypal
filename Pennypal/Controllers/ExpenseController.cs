@@ -13,22 +13,31 @@ public class ExpenseController : BaseApiController
     }
 
     [HttpGet]
-    public async Task<ActionResult<List<Expense>>> GetExpenses()
+    public async Task<ActionResult<List<ExpenseDto>>> GetExpenses()
     {
-        return await _context.Expenses
+        var expenses = await _context.Expenses
             .Include(e => e.Category)
             .ToListAsync();
+
+        return _mapper.Map<List<ExpenseDto>>(expenses);
     }
 
-    [HttpGet("{id}")]
-    public async Task<ActionResult<Expense>> GetExpenseById(Guid id)
+    [HttpGet("{id}", Name = "GetExpenseById")]
+    public async Task<ActionResult<ExpenseDto>> GetExpenseById(Guid id)
     {
         var expense = await _context.Expenses
             .Include(e => e.Category)
             .FirstOrDefaultAsync(e => e.Id == id);
-        if (expense is null) return NotFound();
+        if (expense is null) 
+            return NotFound("We could not find the Expense!");
 
-        return expense;
+        var expenseDto = _mapper.Map<ExpenseDto>(expense);
+        if (expenseDto is null)
+        {
+            throw new Exception("There was a problem mapping the expense");
+        }
+
+        return expenseDto;
     }
 
     [HttpPost]
@@ -41,7 +50,8 @@ public class ExpenseController : BaseApiController
 
         try
         {
-            await _context.SaveChangesAsync();
+              await _context.Entry(expense).Reference(e => e.Category).LoadAsync();
+              await _context.SaveChangesAsync();
         }
         catch (Exception ex)
         {
