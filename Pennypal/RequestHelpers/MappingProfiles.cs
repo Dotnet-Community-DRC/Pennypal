@@ -10,5 +10,7 @@ public class MappingProfiles: Profile
                 => act.Ignore())
             .ForAllMembers(opts 
                 => opts.Condition((src, dest, srcMember) => srcMember != null));
+
+        CreateMap<CreateExpenseDto, Expense>().IncludeMembers(x => x.Category);
     }
 }
