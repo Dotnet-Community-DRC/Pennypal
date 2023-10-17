@@ -4,18 +4,31 @@ public class DbInitializer
 {
     public static void InitDb(WebApplication app)
     {
-        using var scope = app.Services.CreateScope();
-        SeedData(scope.ServiceProvider.GetService<AppDbContext>());
+        try
+        {
+            using var scope = app.Services.CreateScope();
+            SeedData(scope.ServiceProvider.GetService<AppDbContext>());
+        }
+        catch (Exception e)
+        {
+            Console.WriteLine(e.Message, "Error While seeding data");
+            throw;
+        }
     }
     private static void SeedData(AppDbContext context)
     {
         context.Database.Migrate();
         
-        if (context.Categories.Any())
+        if (context.Categories.Any() || context.Expenses.Any())
         {
             Console.WriteLine("Already have data - no need to seed db");
             return;
-        };
+        }
+        
+        var rand = new Random();
+        const int maxDays = 365 * 1;
+       
+       DateTime randomDate = DateTime.UtcNow.AddDays(-rand.Next(maxDays));
         
         var categories = new List<Category>
         {
@@ -44,16 +57,16 @@ public class DbInitializer
         
         var expenses = new List<Expense>
         {
-            new Expense { Id = Guid.NewGuid(), Name = "Expense 21", Amount = 150.30M, Date = DateTime.Now, Description = "Expense description 21", CategoryId = Guid.Parse("2f6c1836-5b6b-4080-9a2b-732a799ce5f0") },
-            new Expense { Id = Guid.NewGuid(), Name = "Expense 22", Amount = 75.20M, Date = DateTime.Now, Description = "Expense description 22", CategoryId = Guid.Parse("a488f89a-bc7c-4b6d-81a3-853c99fc4e72") },
-            new Expense { Id = Guid.NewGuid(), Name = "Expense 23", Amount = 300.00M, Date = DateTime.Now, Description = "Expense description 23", CategoryId = Guid.Parse("63ae5389-40a1-4b68-9a07-d5b7f0c51cc2") },
-            new Expense { Id = Guid.NewGuid(), Name = "Expense 24", Amount = 50.70M, Date = DateTime.Now, Description = "Expense description 24", CategoryId = Guid.Parse("f96d23c0-8910-4f45-b36d-86b0144d3035") },
-            new Expense { Id = Guid.NewGuid(), Name = "Expense 25", Amount = 120.00M, Date = DateTime.Now, Description = "Expense description 25", CategoryId = Guid.Parse("8c53b0e7-1c11-41d7-90f3-8db874d12963")},
-            new Expense { Id = Guid.NewGuid(), Name = "Expense 26", Amount = 200.15M, Date = DateTime.Now, Description = "Expense description 26", CategoryId = Guid.Parse("e35cb3f6-17c9-4a6a-88f1-597f39df5c56") },
-            new Expense { Id = Guid.NewGuid(), Name = "Expense 27", Amount = 80.45M, Date = DateTime.Now, Description = "Expense description 27", CategoryId = Guid.Parse("e574a2d6-7cfd-4f80-912f-072551285d16") },
-            new Expense { Id = Guid.NewGuid(), Name = "Expense 28", Amount = 95.90M, Date = DateTime.Now, Description = "Expense description 28", CategoryId = Guid.Parse("41bb24b5-9876-4bd9-98f6-729f8b1ecbc2")},
-            new Expense { Id = Guid.NewGuid(), Name = "Expense 29", Amount = 170.60M, Date = DateTime.Now, Description = "Expense description 29", CategoryId = Guid.Parse("3b71d982-106e-49de-9d72-0175c4932f9e")},
-            new Expense { Id = Guid.NewGuid(), Name = "Expense 30", Amount = 40.00M, Date = DateTime.Now, Description = "Expense description 30", CategoryId = Guid.Parse("9dfef09b-fab7-4b3b-80f0-37d6df878fd9")}
+            new Expense { Id = Guid.NewGuid(), Name = "Expense 21", Amount = 150.30M, Date = randomDate, Description = "Expense description 21", CategoryId = Guid.Parse("2f6c1836-5b6b-4080-9a2b-732a799ce5f0") },
+            new Expense { Id = Guid.NewGuid(), Name = "Expense 22", Amount = 75.20M, Date =  randomDate, Description = "Expense description 22", CategoryId = Guid.Parse("a488f89a-bc7c-4b6d-81a3-853c99fc4e72") },
+            new Expense { Id = Guid.NewGuid(), Name = "Expense 23", Amount = 300.00M, Date = randomDate, Description = "Expense description 23", CategoryId = Guid.Parse("63ae5389-40a1-4b68-9a07-d5b7f0c51cc2") },
+            new Expense { Id = Guid.NewGuid(), Name = "Expense 24", Amount = 50.70M, Date =  randomDate, Description = "Expense description 24", CategoryId = Guid.Parse("f96d23c0-8910-4f45-b36d-86b0144d3035") },
+            new Expense { Id = Guid.NewGuid(), Name = "Expense 25", Amount = 120.00M, Date = randomDate, Description = "Expense description 25", CategoryId = Guid.Parse("8c53b0e7-1c11-41d7-90f3-8db874d12963")},
+            new Expense { Id = Guid.NewGuid(), Name = "Expense 26", Amount = 200.15M, Date = randomDate, Description = "Expense description 26", CategoryId = Guid.Parse("e35cb3f6-17c9-4a6a-88f1-597f39df5c56") },
+            new Expense { Id = Guid.NewGuid(), Name = "Expense 27", Amount = 80.45M, Date =  randomDate, Description = "Expense description 27", CategoryId = Guid.Parse("e574a2d6-7cfd-4f80-912f-072551285d16") },
+            new Expense { Id = Guid.NewGuid(), Name = "Expense 28", Amount = 95.90M, Date =  randomDate, Description = "Expense description 28", CategoryId = Guid.Parse("41bb24b5-9876-4bd9-98f6-729f8b1ecbc2")},
+            new Expense { Id = Guid.NewGuid(), Name = "Expense 29", Amount = 170.60M, Date = randomDate, Description = "Expense description 29", CategoryId = Guid.Parse("3b71d982-106e-49de-9d72-0175c4932f9e")},
+            new Expense { Id = Guid.NewGuid(), Name = "Expense 30", Amount = 40.00M, Date =  randomDate, Description = "Expense description 30", CategoryId = Guid.Parse("9dfef09b-fab7-4b3b-80f0-37d6df878fd9")}
         };
         
         context.Expenses.AddRange(expenses);

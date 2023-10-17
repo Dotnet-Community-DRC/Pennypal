@@ -13,7 +13,7 @@ builder.Services.AddDbContext<AppDbContext>(option =>
     option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
 });
 
-builder.Services.AddAutoMapper(typeof(MappingProfiles).Assembly); // Scans for Mapping Profiles in the whole project
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies()); // Scans for Mapping Profiles in the whole project
 
 var app = builder.Build();
 

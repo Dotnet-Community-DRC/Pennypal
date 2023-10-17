@@ -1,11 +1,11 @@
 namespace Pennypal.Controllers;
 
-public class ExpenseController : BaseApiController
+public class ExpensesController : BaseApiController
 {
     private readonly AppDbContext _context;
     private readonly ILogger<CategoriesController> _logger;
     private readonly IMapper _mapper;
-    public ExpenseController(AppDbContext context, ILogger<CategoriesController> logger, IMapper mapper)
+    public ExpensesController(AppDbContext context, ILogger<CategoriesController> logger, IMapper mapper)
     {
         _context = context;
         _logger = logger;
@@ -78,15 +78,19 @@ public class ExpenseController : BaseApiController
 
         try
         {
-            expense.Category.Description = expenseDto.Category.Description ?? expense.Category.Description;
-            expense.Category.Name = expenseDto.Category.Name ?? expense.Category.Name;
-
+            expense.Name = expenseDto.Name;
+            expense.Amount = expenseDto.Amount;
+            expense.Date = expenseDto.Date;
+            expense.Description = expenseDto.Description;
+            expense.Category.Name = expenseDto.Category.Name;
+            expense.Category.Description = expenseDto.Category.Description;
+            
             await _context.SaveChangesAsync();
         }
         catch (Exception ex)
         {
             _logger.LogError(ex, "Error Updating Expense!");
-            return BadRequest(new ProblemDetails {Title = "Problem Updating Expense"});
+             return BadRequest(new ProblemDetails {Title = "Problem Updating Expense"});
         }
 
         return Ok();
