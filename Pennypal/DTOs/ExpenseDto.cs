@@ -8,4 +8,12 @@ public class ExpenseDto
     public DateTime Date { get; set; }
     public string Description { get; set; }
     public string CategoryName { get; set; }
+
+    [JsonIgnore] 
+    public Currency Currency { get; set; }
+
+    [JsonIgnore] 
+    public Status Status { get; set; }
+    public string CurrencyCode => Currency.ToString();
+    public string StatusCode => Status.ToString();
 }

@@ -2,7 +2,7 @@
 <project version="4">
   <component name="DataSourceManagerImpl" format="xml" multifile-model="true">
     <data-source source="LOCAL" name="pennypal" uuid="6cccf433-4a53-4509-9640-07c60a32960a">
-      <driver-ref>sqlite.xerial</driver-ref>
+      <driver-ref>0d72ff7a-d2f9-4966-a639-4c664a94bae9</driver-ref>
       <synchronize>true</synchronize>
       <jdbc-driver>org.sqlite.JDBC</jdbc-driver>
       <jdbc-url>jdbc:sqlite:$PROJECT_DIR$/Pennypal/Data/pennypal.db</jdbc-url>

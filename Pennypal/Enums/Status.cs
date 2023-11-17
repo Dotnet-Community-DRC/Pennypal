@@ -2,7 +2,7 @@ namespace Pennypal.Enums;
 
 public enum Status
 {
-    Submitted,
-    Approved,
-    Rejected
+    Submitted = 0,
+    Approved = 1,
+    Rejected= 2
 }

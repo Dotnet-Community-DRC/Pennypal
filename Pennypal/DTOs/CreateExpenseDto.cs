@@ -1,10 +1,16 @@
 namespace Pennypal.DTOs;
-
 public class CreateExpenseDto
 {
-    public string Name { get; set; }
-    public decimal Amount { get; set; }
-    public DateTime Date { get; set; }
+    [Required] public string Name { get; set; }
+
+    [Required] public decimal Amount { get; set; }
+
+    [Required] public DateTime Date { get; set; }
+
     public string Description { get; set; }
-    public Guid CategoryId { get; set; }
+    [Required] public string CategoryName { get; set; }
+
+    [Required] public string CurrencyCode { get; set; }
+    
+    [Required] public string StatusCode { get; set; }
 }
