@@ -1,6 +1,3 @@
-using System.Text.Json;
-using Microsoft.AspNetCore.Mvc;
-
 namespace Pennypal.Middleware;
 
 public class ExceptionMiddleware

@@ -7,5 +7,5 @@ public class Report
     public DateTime Date { get; set; }
     public decimal Amount { get; set; }
 
-    public List<Expense> Expenses { get; set; }
+    public List<Expense> Expenses { get; set; } = new();
 }
