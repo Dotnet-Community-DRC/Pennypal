@@ -1,41 +1,37 @@
+using Pennypal.Extensions;
+using Pennypal.Persistence.Data;
+
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
-builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
-builder.Services.AddProblemDetails();
 
-
-builder.Services.AddDbContext<AppDbContext>(option =>
-{
-    option.UseSqlite(builder.Configuration.GetConnectionString("DefaultConnection"));
-});
-
-// Scans for Mapping Profiles in the whole project
-builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAppServices(builder.Configuration);
+builder.Services.AddIdentityServices(builder.Configuration);
 
 var app = builder.Build();
 
 app.UseMiddleware<ExceptionMiddleware>();
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
     app.UseSwaggerUI();
 }
 
+app.UseCors(opt =>
+{
+    opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3055");
+});
+
 app.UseHttpsRedirection();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();
 
 try
 {
-    DbInitializer.InitDb(app);
+    await DbInitializer.InitDb(app);
 }
 catch (Exception e)
 {

@@ -1,7 +1,6 @@
 global using Microsoft.AspNetCore.Mvc;
 global using AutoMapper;
 global using Microsoft.EntityFrameworkCore;
-global using Pennypal.Data;
 global using Pennypal.DTOs;
 global using Pennypal.Entities;
 global using Pennypal.Middleware;
@@ -10,3 +9,6 @@ global using System.ComponentModel.DataAnnotations;
 global using Pennypal.MapEndpoints;
 global using Microsoft.AspNetCore.Http.HttpResults;
 global using System.Text.Json.Serialization;
+global using Microsoft.AspNetCore.Identity;
+global using Microsoft.OpenApi.Models;
+global using System.Text.Json; 
